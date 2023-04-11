@@ -10,4 +10,4 @@ RUN apk update &&\
 
 EXPOSE 80
 
-ENTRYPOINT [ "highcharts-export-server", "--enableServer 1",  "--port 80" ]
+ENTRYPOINT [ "highcharts-export-server", "--enableServer", "1",  "--port", "80" ]
