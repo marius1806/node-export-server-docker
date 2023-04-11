@@ -12,7 +12,7 @@ RUN apt-get update -y &&\
     npm install &&\
     npm link &&\
     ln -s `which nodejs` /usr/bin/node &&\
-    export PATH="~/.nvm/versions/node/v14.21.3/bin/:$PATH"
+    export PATH="~/.nvm/versions/node/v14.21.3/bin:$PATH"
 
 EXPOSE 7801
 
