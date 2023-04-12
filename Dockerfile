@@ -7,6 +7,8 @@ RUN apt-get update &&\
 
 WORKDIR $HOME/node-export-server/
 
+ENV ACCEPT_HIGHCHARTS_LICENSE YES
+
 RUN npm install -y &&\
     npm link
 
