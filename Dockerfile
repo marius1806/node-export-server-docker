@@ -1,18 +1,19 @@
-FROM ubuntu:latest
+FROM node:16-bullseye
 
-RUN apt-get update -y &&\
-    apt-get install -y curl git bzip2 &&\
-    curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash &&\
-    export NVM_DIR="$HOME/.nvm" &&\
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" &&\
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" &&\
-    nvm install 14.21.3 &&\
-    git clone https://github.com/highcharts/node-export-server &&\
-    cd node-export-server &&\
-    npm install &&\
-    npm link &&\
-    ln -s `which nodejs` /usr/bin/node
+RUN apt-get update &&\
+    apt-get install curl git bzip2 bash &&\
+    ln -s `which nodejs` /usr/bin/node &&\
+    git clone https://github.com/highcharts/node-export-server.git
 
-EXPOSE 7801
+WORKDIR $HOME/node-export-server/
 
-ENTRYPOINT [ "highcharts-export-server", "--enableServer 1",  "--port 7801" ]
+ENV ACCEPT_HIGHCHARTS_LICENSE YES
+
+RUN npm install -y &&\
+    npm link
+
+ENV OPENSSL_CONF=/etc/ssl/
+
+EXPOSE 80
+
+ENTRYPOINT [ "highcharts-export-server",  "--enableServer",  "1",  "--port", "80" ]
