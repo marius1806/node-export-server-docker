@@ -14,4 +14,4 @@ ENV OPENSSL_CONF=/etc/ssl/
 
 EXPOSE 80
 
-ENTRYPOINT [ "highcharts-export-server",  "--enableServer",  "1",  "--port 80" ]
+ENTRYPOINT [ "highcharts-export-server",  "--enableServer",  "1",  "--port", "80" ]
