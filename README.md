@@ -22,8 +22,8 @@ curl -H "Content-Type: application/json" -X POST -d '{"infile":{"title": {"text"
  ```
 
 ## Improvements over naive Docker builds:
-Version pinning for reproducibility
-Reduced image size using slim base image
-Removed unnecessary packages
-Non-root execution for improved security
+1. Version pinning for reproducibility
+2. Reduced image size using slim base image
+3. Removed unnecessary packages
+4. Non-root execution for improved security
 Healthcheck for production monitoring
