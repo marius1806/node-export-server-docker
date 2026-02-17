@@ -1,7 +1,8 @@
 FROM node:16-bullseye
 
-RUN apt-get update &&\
-    apt-get install curl git bzip2 bash &&\
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl git bzip2 && \
+    rm -rf /var/lib/apt/lists/*
     ln -s `which nodejs` /usr/bin/node &&\
     git clone https://github.com/highcharts/node-export-server.git
 
