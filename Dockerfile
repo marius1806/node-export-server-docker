@@ -1,20 +1,38 @@
-FROM node:16-bullseye
+# Use specific version instead of floating tag
+FROM node:16.20.2-bullseye-slim
 
+# Set working directory
+WORKDIR /opt/highcharts-export-server
+
+# Install only required packages and clean up afterwards
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl git bzip2 && \
+    apt-get install -y --no-install-recommends \
+        git \
+        ca-certificates && \
     rm -rf /var/lib/apt/lists/*
-    ln -s `which nodejs` /usr/bin/node &&\
-    git clone https://github.com/highcharts/node-export-server.git
 
-WORKDIR $HOME/node-export-server/
+# Clone a specific version for reproducibility
+ARG EXPORT_SERVER_VERSION=3.1.0
+RUN git clone --depth 1 --branch v${EXPORT_SERVER_VERSION} \
+    https://github.com/highcharts/node-export-server.git . 
 
-ENV ACCEPT_HIGHCHARTS_LICENSE YES
+# Accept Highcharts license
+ENV ACCEPT_HIGHCHARTS_LICENSE=YES
 
-RUN npm install -y &&\
-    npm link
+# Install dependencies (clean, production only)
+RUN npm install --omit=dev && \
+    npm cache clean --force
 
-ENV OPENSSL_CONF=/etc/ssl/
+# Create non-root user for security
+RUN useradd -m appuser
+USER appuser
 
+# Expose service port
 EXPOSE 80
 
-ENTRYPOINT [ "highcharts-export-server",  "--enableServer",  "1",  "--port", "80" ]
+# Healthcheck for container monitoring
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \
+  CMD curl -f http://localhost:80/health || exit 1
+
+# Start service
+ENTRYPOINT ["node", "bin/cli.js", "--enableServer", "1", "--port", "80"]
