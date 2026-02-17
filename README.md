@@ -1,6 +1,6 @@
 # node-export-server-docker
 
-# Local test
+## Local test
 
 1. Clone this repository
 2. Build Docker image
@@ -20,3 +20,10 @@ docker run --rm -p 7801:80 --name hc highcharts-server
 ```bash
 curl -H "Content-Type: application/json" -X POST -d '{"infile":{"title": {"text": "Steep Chart"}, "xAxis": {"categories": ["Jan", "Feb", "Mar"]}, "series": [{"data": [29.9, 71.5, 106.4]}]}}' 127.0.0.1:7801 -o mychart.png
  ```
+
+## Improvements over naive Docker builds:
+Version pinning for reproducibility
+Reduced image size using slim base image
+Removed unnecessary packages
+Non-root execution for improved security
+Healthcheck for production monitoring
